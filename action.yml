@@ -57,7 +57,7 @@ runs:
   - name: Checkout
     uses: actions/checkout@v4
     with:
-      repository: dragomira2/uki-release-notes-action
+      repository: dragomira2-ppb/uki-release-notes-action
       token: ${{ inputs.apiToken }}
 
   - name: Set up Python
