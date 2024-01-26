@@ -54,6 +54,7 @@ runs:
     uses: actions/checkout@v4
     with:
       repository: dragomira2/uki-release-notes-action
+      token: ${{ secrets.TOKEN }}
 
   - name: Set up Python
     uses: actions/setup-python@v4
