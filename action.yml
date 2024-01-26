@@ -85,8 +85,8 @@ runs:
   
   - name: Validate inputs
     shell: bash
-    run: python validate_env_variables.py
-      
-#  - name: Run python script
-#    shell: bash
-#    run: python script.py
+    run: |
+      ls -l /home/runner/work/
+      ls -l /home/runner/work/msb
+      ls -l /home/runner/work/msb/msb
+      python ./validate_env_variables.py
