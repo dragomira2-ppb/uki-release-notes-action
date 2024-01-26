@@ -57,7 +57,26 @@ runs:
 
   - name: Install dependencies
     shell: bash
-    run: pip install jinja2 requests actions_toolkit
+    run: pip install jinja2 requests
 
-  - name: Generate release notes
-    uses: dragomira2-ppb/uki-release-notes-action/.github/workflows/release_notes.yml
+  - name: Set Environment Variables
+    run: |
+        echo "APPLICATION_NAME=${{ inputs.applicationName }}" >> $GITHUB_ENV
+        echo "TLA_NAME=${{ inputs.tlaName }}" >> $GITHUB_ENV
+        echo "BRAND=${{ inputs.brand }}" >> $GITHUB_ENV
+        echo "CONFLUENCE_USERNAME=${{ inputs.confluenceUsername }}" >> $GITHUB_ENV
+        echo "CONFLUENCE_URL=${{ inputs.confluenceUrl }}" >> $GITHUB_ENV
+        echo "CONFLUENCE_PAGE_ID=${{ inputs.confluencePageId }}" >> $GITHUB_ENV
+        echo "CONFLUENCE_SPACE=${{ inputs.confluenceSpace }}" >> $GITHUB_ENV
+        echo "CONFLUENCE_API_TOKEN=${{ inputs.confluenceApiToken }}" >> $GITHUB_ENV
+        echo "CONFLUENCE_EXISTING_PAGE=${{ inputs.confluenceExistingPage }}" >> $GITHUB_ENV
+        echo "CONFLUENCE_PAGE_VERSION=${{ inputs.confluencePageVersion }}" >> $GITHUB_ENV
+    shell: bash
+  
+  - name: Validate inputs
+    shell: bash
+    run: python scripts/validate_env_variables.py
+      
+  - name: Run python script
+    shell: bash
+    run: python scripts/script.py
