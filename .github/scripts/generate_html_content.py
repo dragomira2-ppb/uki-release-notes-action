@@ -1,6 +1,6 @@
 from datetime import datetime
 from jinja2 import Environment, FileSystemLoader
-from scripts.validate_env_variables import ENV_VARIABLES
+from validate_env_variables import ENV_VARIABLES
 
 def generate_info_table():
     

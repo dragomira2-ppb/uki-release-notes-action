@@ -6,10 +6,6 @@ inputs:
     description: "Application name"
     required: true
 
-  repository:
-    description: "Repository"
-    required: true
-
   tlaName:
     description: "TLA Name"
     required: true
@@ -20,14 +16,6 @@ inputs:
 
   environment:
     description: "Environment"
-    required: true
-
-  releaseName:
-    description: "Release Name"
-    required: true
-
-  buildNumber:
-    description: "Build Number"
     required: true
 
   confluenceUsername:
@@ -71,4 +59,4 @@ runs:
 
   - name: Install dependencies
     shell: bash
-    run: pip install -r requirements.txt
+    run: pip install -r ./requirements.txt

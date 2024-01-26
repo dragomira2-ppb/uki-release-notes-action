@@ -1,6 +1,6 @@
-from scripts.generate_html_content import generate_html_content
-from scripts.parse_commits_file import parse_commit_data
-from scripts.publish_to_confluence import publish_page_to_confluence
+from generate_html_content import generate_html_content
+from parse_commits_file import parse_commit_data
+from publish_to_confluence import publish_page_to_confluence
 
 import logging
 

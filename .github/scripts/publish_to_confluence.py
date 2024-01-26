@@ -1,6 +1,6 @@
 import requests
-from scripts.validate_env_variables import ENV_VARIABLES
-from scripts.validate_env_variables import publish_page_to_confluence
+from validate_env_variables import ENV_VARIABLES
+from validate_env_variables import publish_page_to_confluence
 
 def publish_page_to_confluence(html_content):
 
