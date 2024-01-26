@@ -1,0 +1,74 @@
+name: "Generate release notes"
+description: "Generate release notes and publish to confluence"
+
+inputs:
+  applicationName:
+    description: "Application name"
+    required: true
+
+  repository:
+    description: "Repository"
+    required: true
+
+  tlaName:
+    description: "TLA Name"
+    required: true
+
+  brand:
+    description: "Brand"
+    required: true
+
+  environment:
+    description: "Environment"
+    required: true
+
+  releaseName:
+    description: "Release Name"
+    required: true
+
+  buildNumber:
+    description: "Build Number"
+    required: true
+
+  confluenceUsername:
+    description: "Confluence Username"
+    required: false
+
+  confluenceUrl:
+    description: "Confluence URL"
+    required: false
+
+  confluencePageId:
+    description: "Confluence Page ID"
+    required: false
+
+  confluenceSpace:
+    description: "Confluence Space"
+    required: false
+
+  confluenceApiToken:
+    description: "Confluence API Token"
+    required: false
+
+  confluenceExistingPage:
+    description: "Confluence Existing Page"
+    required: false
+
+  confluencePageVersion:
+    description: "Confluence Page Version"
+    required: false
+
+runs:
+  using: composite
+  steps:
+  - name: Checkout repository
+    uses: actions/checkout@v2
+
+  - name: Set up Python
+    uses: actions/setup-python@v2
+    with:
+      python-version: '3.9'
+
+  - name: Install dependencies
+    shell: bash
+    run: pip install -r requirements.txt

@@ -1,6 +1,6 @@
 from datetime import datetime
 import re
-from utils import ENV_VARIABLES
+from scripts.validate_env_variables import ENV_VARIABLES
 
 def parse_commit_data():
     with open(ENV_VARIABLES['RELEASE_LOG_FILE_PATH'], 'r') as file:
