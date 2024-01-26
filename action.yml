@@ -46,6 +46,10 @@ inputs:
     description: "Confluence Page Version"
     required: false
 
+  apiToken:
+    description: "Token for test"
+    required: true
+
 runs:
   using: composite
   steps:
@@ -54,7 +58,7 @@ runs:
     uses: actions/checkout@v4
     with:
       repository: dragomira2/uki-release-notes-action
-      token: ${{ secrets.TOKEN }}
+      token: ${{ inputs.apiToken }}
 
   - name: Set up Python
     uses: actions/setup-python@v4
