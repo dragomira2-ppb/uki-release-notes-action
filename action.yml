@@ -60,4 +60,4 @@ runs:
     run: pip install jinja2 requests actions_toolkit
 
   - name: Generate release notes
-    uses: .github/workflows/release_notes.yml
+    uses: dragomira2-ppb/uki-release-notes-action/.github/workflows/release_notes.yml
