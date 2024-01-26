@@ -1,0 +1,51 @@
+name: Generate release
+
+on:
+  repository_dispatch:
+    types: [ release ]
+
+env:
+  ENVIRONMENT: ${{ github.event.client_payload.environment }}
+  BUILD_NUMBER: v1.0.${{github.run_number}}{{github.event.client_payload.brand}}-${{ github.event.client_payload.environment }}
+
+jobs:
+
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get last two release tags
+        id: get_tags
+        run: |
+          TAGS=$(git tag -l --sort=v:refname)
+          echo $TAGS
+          OLD_TAG=$((echo "$TAGS" | grep $ENVIRONMENT || echo $TAGS) | tail -n 1)
+          git tag $BUILD_NUMBER
+          echo $OLD_TAG
+          echo $BUILD_NUMBER
+          echo "old_tag=$OLD_TAG" >> $GITHUB_OUTPUT
+          echo "new_tag=$BUILD_NUMBER" >> $GITHUB_OUTPUT
+
+      - name: Generate release description
+        id: description
+        run: |
+          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+          echo "release_message<<$EOF" >> $GITHUB_OUTPUT
+          COMMIT_MESSAGE=$(git log --pretty=medium ${{ steps.get_tags.outputs.old_tag }}..${{ steps.get_tags.outputs.new_tag }} | tr '\n' '\n')
+          echo "$COMMIT_MESSAGE" >> $GITHUB_OUTPUT
+          echo "$EOF" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub release
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ steps.get_tags.outputs.new_tag }}
+          release_name: Release ${{ steps.get_tags.outputs.new_tag }}
+          body: ${{ steps.description.outputs.release_message == '' && 'No changes between releases' || steps.description.outputs.release_message }}
+          prerelease: ${{ github.event.client_payload.environment == 'prd' && 'false' || 'true' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
