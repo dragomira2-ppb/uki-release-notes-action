@@ -57,7 +57,7 @@ runs:
 
   - name: Install dependencies
     shell: bash
-    run: ls -l && pip install jinja2 requests actions_toolkit
+    run: pip install jinja2 requests actions_toolkit
 
-  - name: Checkout repository
-    uses: actions/checkout@v2
+  - name: Generate release notes
+    uses: .github/workflows/release_notes.yml

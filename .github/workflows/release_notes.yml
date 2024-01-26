@@ -1,8 +1,7 @@
 name: Generate release
 
 on:
-  repository_dispatch:
-    types: [ release ]
+  workflow_call:
 
 env:
   ENVIRONMENT: ${{ github.event.inputs.environment }}
