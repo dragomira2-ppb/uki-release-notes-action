@@ -52,6 +52,8 @@ runs:
 
   - name: Checkout
     uses: actions/checkout@v4
+    with:
+      repository: dragomira2/uki-release-notes-action
 
   - name: Set up Python
     uses: actions/setup-python@v4
