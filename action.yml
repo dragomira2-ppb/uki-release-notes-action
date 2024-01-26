@@ -85,8 +85,8 @@ runs:
   
   - name: Validate inputs
     shell: bash
-    run: python scripts/validate_env_variables.py
+    run: python uki-release-notes-action/scripts/validate_env_variables.py
       
   - name: Run python script
     shell: bash
-    run: python scripts/script.py
+    run: python uki-release-notes-action/scripts/script.py
