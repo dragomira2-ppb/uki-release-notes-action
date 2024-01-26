@@ -10,12 +10,8 @@ inputs:
     description: "TLA Name"
     required: true
 
-  brand:
-    description: "Brand"
-    required: true
-
-  environment:
-    description: "Environment"
+  repository:
+    description: "The github repository of the TLA"
     required: true
 
   confluenceUsername:
@@ -73,7 +69,7 @@ runs:
     run: |
         echo "APPLICATION_NAME=${{ inputs.applicationName }}" >> $GITHUB_ENV
         echo "TLA_NAME=${{ inputs.tlaName }}" >> $GITHUB_ENV
-        echo "BRAND=${{ inputs.brand }}" >> $GITHUB_ENV
+        echo "REPOSITORY=${{ inputs.repository }}" >> $GITHUB_ENV
         echo "CONFLUENCE_USERNAME=${{ inputs.confluenceUsername }}" >> $GITHUB_ENV
         echo "CONFLUENCE_URL=${{ inputs.confluenceUrl }}" >> $GITHUB_ENV
         echo "CONFLUENCE_PAGE_ID=${{ inputs.confluencePageId }}" >> $GITHUB_ENV
