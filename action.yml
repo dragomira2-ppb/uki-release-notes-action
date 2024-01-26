@@ -85,12 +85,8 @@ runs:
   
   - name: Validate inputs
     shell: bash
-    run: |
-      ls -l /home/runner/work/
-      ls -l /home/runner/work/msb
-      ls -l /home/runner/work/msb/msb
-      python uki-release-notes-action/scripts/validate_env_variables.py
+    run: python validate_env_variables.py
       
-  - name: Run python script
-    shell: bash
-    run: python uki-release-notes-action/scripts/script.py
+#  - name: Run python script
+#    shell: bash
+#    run: python script.py
