@@ -5,8 +5,8 @@ on:
     types: [ release ]
 
 env:
-  ENVIRONMENT: ${{ github.event.client_payload.environment }}
-  BUILD_NUMBER: v1.0.${{github.run_number}}{{github.event.client_payload.brand}}-${{ ENVIRONMENT }}
+  ENVIRONMENT: ${{ github.event.inputs.environment }}
+  BUILD_NUMBER: v1.0.${{github.run_number}}{{github.event.inputs.brand}}-${{ ENVIRONMENT }}
   RELEASE_NAME: Release ${{BUILD_NUMBER}}
   REPOSITORY: ${{ github.repository }}
 
