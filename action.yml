@@ -50,8 +50,8 @@ inputs:
     description: "Confluence Page Version"
     required: false
 
-  apiToken:
-    description: "Token for test"
+  githubToken:
+    description: "Github token to create release"
     required: true
 
 runs:
@@ -142,3 +142,5 @@ runs:
         release_name: ${{ steps.get_tags.outputs.release_name }}
         body: ${{ steps.release_description.outputs.release_message == '' && 'No changes between releases' || steps.release_description.outputs.release_message }}
         prerelease: ${{ env.ENVIRONMENT == 'prd' && 'false' || 'true' }}
+      env:
+        GITHUB_TOKEN: ${{ inputs.githubToken }}
