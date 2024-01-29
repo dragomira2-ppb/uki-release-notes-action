@@ -10,12 +10,16 @@ inputs:
     description: "TLA Name"
     required: true
 
-  releaseName:
-    description: "Release Name"
+  environment:
+    description: "Environment"
     required: true
 
-  repository:
-    description: "The github repository of the TLA"
+  brand:
+    description: "Brand Name"
+    required: true
+
+  buildNumber:
+    description: "Build number convention (ex 1.0.0)"
     required: true
 
   confluenceUsername:
@@ -53,41 +57,89 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
-  - name: Checkout
-    uses: actions/checkout@v4
-    with:
-      repository: dragomira2-ppb/uki-release-notes-action
-      token: ${{ inputs.apiToken }}
+    - name: Get last two release tags
+      id: get_tags
+      shell: bash
+      run: |
+        TAGS=$(git tag -l --sort=v:refname)
+        ENVIRONMENT=${{ inputs.environment }}
+        BRAND=${{ inputs.brand }}
+        BUILD_NUMBER=v${{ inputs.buildNumber }}
+        
+        OLD_TAG=$((echo "$TAGS" | grep $ENVIRONMENT || echo $TAGS) | tail -n 1)
+        NEW_TAG=$BUILD_NUMBER$BRAND-$ENVIRONMENT
+        echo "old_tag=$OLD_TAG" >> $GITHUB_OUTPUT
+        echo "new_tag=$NEW_TAG" >> $GITHUB_OUTPUT
+        echo "release_name=Release $NEW_TAG" >> $GITHUB_OUTPUT
 
-  - name: Set up Python
-    uses: actions/setup-python@v4
-    with:
-      python-version: '3.9'
+    - name: Generate release description
+      id: release_description
+      shell: bash
+      run: |
+        EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+        echo "release_message<<$EOF" >> $GITHUB_OUTPUT
+        COMMIT_MESSAGE=$(git log --pretty=medium ${{ steps.get_tags.outputs.old_tag }}..${{ steps.get_tags.outputs.new_tag }} | tr '\n' '\n')
+        echo "commit_message=$COMMIT_MESSAGE" >> $GITHUB_OUTPUT
+        echo "$EOF" >> $GITHUB_OUTPUT
 
-  - name: Install dependencies
-    shell: bash
-    run: pip install -r requirements.txt
-
-  - name: Set Environment Variables
-    run: |
-        echo "APPLICATION_NAME=${{ inputs.applicationName }}" >> $GITHUB_ENV
-        echo "TLA_NAME=${{ inputs.tlaName }}" >> $GITHUB_ENV
-        echo "REPOSITORY=${{ inputs.repository }}" >> $GITHUB_ENV
-        echo "RELEASE_NAME=${{ inputs.releaseName }}" >> $GITHUB_ENV
-        echo "CONFLUENCE_USERNAME=${{ inputs.confluenceUsername }}" >> $GITHUB_ENV
-        echo "CONFLUENCE_URL=${{ inputs.confluenceUrl }}" >> $GITHUB_ENV
-        echo "CONFLUENCE_PAGE_ID=${{ inputs.confluencePageId }}" >> $GITHUB_ENV
-        echo "CONFLUENCE_SPACE=${{ inputs.confluenceSpace }}" >> $GITHUB_ENV
-        echo "CONFLUENCE_API_TOKEN=${{ inputs.confluenceApiToken }}" >> $GITHUB_ENV
-        echo "CONFLUENCE_EXISTING_PAGE=${{ inputs.confluenceExistingPage }}" >> $GITHUB_ENV
-        echo "CONFLUENCE_PAGE_VERSION=${{ inputs.confluencePageVersion }}" >> $GITHUB_ENV
-    shell: bash
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        repository: dragomira2-ppb/uki-release-notes-action
+        token: ${{ inputs.apiToken }}
   
-  - name: Validate inputs
-    shell: bash
-    run: |
-      ls -l /home/runner/work/
-      ls -l /home/runner/work/msb
-      ls -l /home/runner/work/msb/msb
-      python ./validate_env_variables.py
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+  
+    - name: Install dependencies
+      shell: bash
+      run: pip install -r requirements.txt
+  
+    - name: Set Environment Variables
+      run: |
+          echo "APPLICATION_NAME=${{ inputs.applicationName }}" >> $GITHUB_ENV
+          echo "TLA_NAME=${{ inputs.tlaName }}" >> $GITHUB_ENV
+          echo "REPOSITORY=https://github.com/Flutter-Global/${{ github.repository }}" >> $GITHUB_ENV
+          echo "ENVIRONMENT=${{ inputs.environment }}" >> $GITHUB_ENV
+          echo "BRAND=${{ inputs.brand }}" >> $GITHUB_ENV
+          echo "RELEASE_NAME=${{ steps.get_tags.outputs.release_name }}" >> $GITHUB_ENV
+          echo "COMMIT_MESSAGE=${{ steps.release_description.outputs.commit_message }} >> $GITHUB_ENV
+          echo "CONFLUENCE_USERNAME=${{ inputs.confluenceUsername }}" >> $GITHUB_ENV
+          echo "CONFLUENCE_URL=${{ inputs.confluenceUrl }}" >> $GITHUB_ENV
+          echo "CONFLUENCE_PAGE_ID=${{ inputs.confluencePageId }}" >> $GITHUB_ENV
+          echo "CONFLUENCE_SPACE=${{ inputs.confluenceSpace }}" >> $GITHUB_ENV
+          echo "CONFLUENCE_API_TOKEN=${{ inputs.confluenceApiToken }}" >> $GITHUB_ENV
+          echo "CONFLUENCE_EXISTING_PAGE=${{ inputs.confluenceExistingPage }}" >> $GITHUB_ENV
+          echo "CONFLUENCE_PAGE_VERSION=${{ inputs.confluencePageVersion }}" >> $GITHUB_ENV
+      shell: bash
+    
+    - name: Validate inputs
+      shell: bash
+      run: |
+        ls -l /home/runner/work/
+        ls -l /home/runner/work/msb
+        ls -l /home/runner/work/msb/msb
+        python ./scripts/validate_env_variables.py
+        
+        #add script step
+
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+#    - name: Create GitHub release
+#      id: create_release
+#      uses: actions/create-release@v1
+#      with:
+#        tag_name: ${{ steps.get_tags.outputs.new_tag }}
+#        release_name: ${{ steps.get_tags.outputs.release_name }}
+#        body: ${{ steps.release_description.outputs.release_message == '' && 'No changes between releases' || steps.release_description.outputs.release_message }}
+#        prerelease: ${{ env.ENVIRONMENT == 'prd' && 'false' || 'true' }}
+#      env:
+#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
