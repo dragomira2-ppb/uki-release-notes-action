@@ -84,7 +84,7 @@ runs:
       run: |
         EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
         echo "release_message<<$EOF" >> $GITHUB_OUTPUT
-        COMMIT_MESSAGE_ENCODED=$((git log --pretty=medium ${{ steps.get_tags.outputs.old_tag }}..${{ steps.get_tags.outputs.new_tag }} | tr '\n' '-n') | base64)
+        COMMIT_MESSAGE_ENCODED=$(((git log --pretty=medium ${{ steps.get_tags.outputs.old_tag }}..${{ steps.get_tags.outputs.new_tag }} | tr '\n' '-n') | base64) | tr ' ' '')
         echo $COMMIT_MESSAGE_ENCODED
         echo "$EOF" >> $GITHUB_OUTPUT
         echo "$COMMIT_MESSAGE_ENCODED" >> $GITHUB_ENV
