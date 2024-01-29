@@ -94,7 +94,7 @@ runs:
       uses: actions/checkout@v4
       with:
         repository: dragomira2-ppb/uki-release-notes-action
-        token: ${{ inputs.apiToken }}
+        token: ${{ inputs.githubToken }}
   
     - name: Set up Python
       uses: actions/setup-python@v4
