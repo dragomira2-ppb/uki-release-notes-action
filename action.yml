@@ -113,7 +113,6 @@ runs:
           echo "BUILD_NUMBER=${{ steps.get_tags.outputs.new_tag }}" >> $GITHUB_ENV
           echo "BRAND=${{ inputs.brand }}" >> $GITHUB_ENV
           echo "RELEASE_NAME=${{ steps.get_tags.outputs.release_name }}" >> $GITHUB_ENV
-          echo "COMMIT_MESSAGE=$($COMMIT_MESSAGE_ENCODED | base64 -d)" >> $GITHUB_ENV
           echo "CONFLUENCE_USERNAME=${{ inputs.confluenceUsername }}" >> $GITHUB_ENV
           echo "CONFLUENCE_URL=${{ inputs.confluenceUrl }}" >> $GITHUB_ENV
           echo "CONFLUENCE_PAGE_ID=${{ inputs.confluencePageId }}" >> $GITHUB_ENV
