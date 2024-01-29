@@ -73,6 +73,7 @@ runs:
         
         OLD_TAG=$((echo "$TAGS" | grep $ENVIRONMENT | grep $BRAND || echo $TAGS) | tail -n 1)
         NEW_TAG=$BUILD_NUMBER$BRAND-$ENVIRONMENT
+        git tag $NEW_TAG
         echo "old_tag=$OLD_TAG" >> $GITHUB_OUTPUT
         echo "new_tag=$NEW_TAG" >> $GITHUB_OUTPUT
         echo "release_name=Release $NEW_TAG" >> $GITHUB_OUTPUT
