@@ -87,7 +87,7 @@ runs:
         COMMIT_MESSAGE=$(git log --pretty=medium ${{ steps.get_tags.outputs.old_tag }}..${{ steps.get_tags.outputs.new_tag }} | tr '\n' '\n')
         echo $COMMIT_MESSAGE
         echo "$EOF" >> $GITHUB_OUTPUT
-        echo "COMMIT_MESSAGE=$COMMIT_MESSAGE" >> $GITHUB_ENV
+        echo "$COMMIT_MESSAGE >> release.txt"
 
     - name: Checkout
       uses: actions/checkout@v4
