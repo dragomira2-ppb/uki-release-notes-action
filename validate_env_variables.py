@@ -10,6 +10,7 @@ ENV_VARIABLES = {
     'ENVIRONMENT' : os.environ.get('ENVIRONMENT', ''),
 
     #release details env variables
+    'COMMIT_MESSAGE' : os.environ.get('COMMIT_MESSAGE', 'No changes between releases'),
     'RELEASE_NAME' : os.environ.get('RELEASE_NAME', ''),
     'BUILD_NUMBER' : os.environ.get('BUILD_NUMBER', ''),
 

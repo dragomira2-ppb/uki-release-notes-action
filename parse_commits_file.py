@@ -3,8 +3,7 @@ import re
 from validate_env_variables import ENV_VARIABLES
 
 def parse_commit_data():
-    with open('release.txt', 'r') as file:
-       input_release_commits = file.read()
+    input_release_commits = ENV_VARIABLES['COMMIT_MESSAGE']
 
     commit_data_list = []
     commit_pattern = re.compile(
