@@ -111,6 +111,7 @@ runs:
           echo "TLA_NAME=${{ inputs.tlaName }}" >> $GITHUB_ENV
           echo "REPOSITORY=https://github.com/Flutter-Global/${{ github.repository }}" >> $GITHUB_ENV
           echo "ENVIRONMENT=${{ inputs.environment }}" >> $GITHUB_ENV
+          echo "BUILD_NUMBER=${{ steps.get_tags.outputs.new_tag }}" >> $GITHUB_ENV
           echo "BRAND=${{ inputs.brand }}" >> $GITHUB_ENV
           echo "RELEASE_NAME=${{ steps.get_tags.outputs.release_name }}" >> $GITHUB_ENV
           echo "CONFLUENCE_USERNAME=${{ inputs.confluenceUsername }}" >> $GITHUB_ENV
@@ -125,9 +126,7 @@ runs:
     - name: Validate inputs
       shell: bash
       run: |
-        ls -l /home/runner/work/
-        ls -l /home/runner/work/msb
-        ls -l /home/runner/work/msb/msb
+        ls -la /home/runner/work/msb/msb
         python validate_env_variables.py
 
     - name: Checkout code
