@@ -84,7 +84,7 @@ runs:
       run: |
         EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
         echo "release_message<<$EOF" >> $GITHUB_OUTPUT
-        COMMIT_MESSAGE_ENCODED=$((git log --pretty=medium ${{ steps.get_tags.outputs.old_tag }}..${{ steps.get_tags.outputs.new_tag }} | tr '\n' '\n') | base64)
+        COMMIT_MESSAGE_ENCODED=$((git log --pretty=medium ${{ steps.get_tags.outputs.old_tag }}..${{ steps.get_tags.outputs.new_tag }} | tr '\n' '-n') | base64)
         echo $COMMIT_MESSAGE_ENCODED
         echo "$EOF" >> $GITHUB_OUTPUT
         echo "$COMMIT_MESSAGE_ENCODED" >> $GITHUB_ENV
@@ -113,7 +113,7 @@ runs:
           echo "BUILD_NUMBER=${{ steps.get_tags.outputs.new_tag }}" >> $GITHUB_ENV
           echo "BRAND=${{ inputs.brand }}" >> $GITHUB_ENV
           echo "RELEASE_NAME=${{ steps.get_tags.outputs.release_name }}" >> $GITHUB_ENV
-          echo "COMMIT_MESSAGE=$( $COMMIT_MESSAGE_ENCODED | base64 --decode )" >> $GITHUB_ENV
+          echo "COMMIT_MESSAGE=$($COMMIT_MESSAGE_ENCODED | base64 --decode)" >> $GITHUB_ENV
           echo "CONFLUENCE_USERNAME=${{ inputs.confluenceUsername }}" >> $GITHUB_ENV
           echo "CONFLUENCE_URL=${{ inputs.confluenceUrl }}" >> $GITHUB_ENV
           echo "CONFLUENCE_PAGE_ID=${{ inputs.confluencePageId }}" >> $GITHUB_ENV
