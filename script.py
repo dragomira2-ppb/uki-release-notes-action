@@ -8,7 +8,7 @@ def main():
     try:
         commit_data = parse_commit_data()
         html_content = generate_html_content(commit_data)
-        # publish_page_to_confluence(html_content)
+        publish_page_to_confluence(html_content)
     except ValueError as e:
         logging.error(str(e))
 

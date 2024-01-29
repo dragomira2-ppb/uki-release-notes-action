@@ -84,9 +84,10 @@ runs:
       run: |
         EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
         echo "release_message<<$EOF" >> $GITHUB_OUTPUT
-        COMMIT_MESSAGE_ENCODED=$((git log --pretty=medium ${{ steps.get_tags.outputs.old_tag }}..${{ steps.get_tags.outputs.new_tag }} | tr '\n' '\n') | base64 -w0)
-        echo $COMMIT_MESSAGE_ENCODED
+        COMMIT_MESSAGE=$(git log --pretty=medium ${{ steps.get_tags.outputs.old_tag }}..${{ steps.get_tags.outputs.new_tag }} | tr '\n' '\n')
+        echo "$COMMIT_MESSAGE" >> $GITHUB_OUTPUT
         echo "$EOF" >> $GITHUB_OUTPUT
+        COMMIT_MESSAGE_ENCODED=$(echo $COMMIT_MESSAGE | base64 -w0)
         echo "COMMIT_MESSAGE_ENCODED=$COMMIT_MESSAGE_ENCODED" >> $GITHUB_ENV
 
     - name: Checkout
@@ -108,7 +109,7 @@ runs:
       run: |
           echo "APPLICATION_NAME=${{ inputs.applicationName }}" >> $GITHUB_ENV
           echo "TLA_NAME=${{ inputs.tlaName }}" >> $GITHUB_ENV
-          echo "REPOSITORY=https://github.com/Flutter-Global/${{ github.repository }}" >> $GITHUB_ENV
+          echo "REPOSITORY=https://github.com/${{ github.repository }}" >> $GITHUB_ENV
           echo "ENVIRONMENT=${{ inputs.environment }}" >> $GITHUB_ENV
           echo "BUILD_NUMBER=${{ steps.get_tags.outputs.new_tag }}" >> $GITHUB_ENV
           echo "BRAND=${{ inputs.brand }}" >> $GITHUB_ENV
@@ -130,14 +131,16 @@ runs:
 
     - name: Checkout code
       uses: actions/checkout@v4
+      with:
+        repository: ${{ github.repository }}
 
-#    - name: Create GitHub release
-#      id: create_release
-#      uses: actions/create-release@v1
-#      with:
-#        tag_name: ${{ steps.get_tags.outputs.new_tag }}
-#        release_name: ${{ steps.get_tags.outputs.release_name }}
-#        body: ${{ steps.release_description.outputs.release_message == '' && 'No changes between releases' || steps.release_description.outputs.release_message }}
-#        prerelease: ${{ env.ENVIRONMENT == 'prd' && 'false' || 'true' }}
-#      env:
-#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Create GitHub release
+      id: create_release
+      uses: actions/create-release@v1
+      with:
+        tag_name: ${{ steps.get_tags.outputs.new_tag }}
+        release_name: ${{ steps.get_tags.outputs.release_name }}
+        body: ${{ steps.release_description.outputs.release_message == '' && 'No changes between releases' || steps.release_description.outputs.release_message }}
+        prerelease: ${{ env.ENVIRONMENT == 'prd' && 'false' || 'true' }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
