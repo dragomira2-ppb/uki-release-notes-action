@@ -43,7 +43,7 @@ logging.basicConfig(level=logging.INFO,
 def validate_env_variables():
 
     for key, value in ENV_VARIABLES.items():
-
+        print("key  " + key + "  value " + value)
         if not value:
             if key.startswith('CONFLUENCE_'):
                 # Confluence variables are optional, log a warning if empty
