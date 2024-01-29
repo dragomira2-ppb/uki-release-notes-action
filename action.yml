@@ -87,7 +87,7 @@ runs:
         COMMIT_MESSAGE=$(git log --pretty=medium ${{ steps.get_tags.outputs.old_tag }}..${{ steps.get_tags.outputs.new_tag }} | tr '\n' '\n')
         echo $COMMIT_MESSAGE
         echo "$EOF" >> $GITHUB_OUTPUT
-        echo "$COMMIT_MESSAGE >> release.txt"
+        echo "$COMMIT_MESSAGE" >> release.txt
 
     - name: Checkout
       uses: actions/checkout@v4
@@ -127,7 +127,7 @@ runs:
         ls -l /home/runner/work/
         ls -l /home/runner/work/msb
         ls -l /home/runner/work/msb/msb
-        python ./scripts/validate_env_variables.py
+        python validate_env_variables.py
 
     - name: Checkout code
       uses: actions/checkout@v4
