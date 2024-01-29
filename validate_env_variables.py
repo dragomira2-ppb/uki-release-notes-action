@@ -11,7 +11,7 @@ ENV_VARIABLES = {
     'ENVIRONMENT' : os.environ.get('ENVIRONMENT', ''),
 
     #release details env variables
-    'COMMIT_MESSAGE' : base64.b64decode(os.environ.get('COMMIT_MESSAGE_ENCODED', '')).decode('utf-8'),
+    'COMMIT_MESSAGE' : os.environ.get('COMMIT_MESSAGE_ENCODED', 'No changes between releases'),
     'RELEASE_NAME' : os.environ.get('RELEASE_NAME', ''),
     'BUILD_NUMBER' : os.environ.get('BUILD_NUMBER', ''),
 
@@ -43,7 +43,6 @@ logging.basicConfig(level=logging.INFO,
 def validate_env_variables():
 
     for key, value in ENV_VARIABLES.items():
-        print("key  " + key + "  value " + value)
         if not value:
             if key.startswith('CONFLUENCE_'):
                 # Confluence variables are optional, log a warning if empty
