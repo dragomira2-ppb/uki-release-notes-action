@@ -87,7 +87,7 @@ runs:
         COMMIT_MESSAGE=$(git log --pretty=medium ${{ steps.get_tags.outputs.old_tag }}..${{ steps.get_tags.outputs.new_tag }} | tr '\n' '\n')
         echo $COMMIT_MESSAGE
         echo "$EOF" >> $GITHUB_OUTPUT
-        CURR_WORK_DIR = $(pwd)
+        CURR_WORK_DIR=$(pwd)
         echo "$COMMIT_MESSAGE" >> $CURR_WORK_DIR/release.txt
 
     - name: Checkout
