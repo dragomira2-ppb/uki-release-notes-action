@@ -85,8 +85,9 @@ runs:
         EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
         echo "release_message<<$EOF" >> $GITHUB_OUTPUT
         COMMIT_MESSAGE=$(git log --pretty=medium ${{ steps.get_tags.outputs.old_tag }}..${{ steps.get_tags.outputs.new_tag }} | tr '\n' '\n')
-        echo "commit_message=$COMMIT_MESSAGE" >> $GITHUB_OUTPUT
+        echo $COMMIT_MESSAGE
         echo "$EOF" >> $GITHUB_OUTPUT
+        echo "commit_message=$COMMIT_MESSAGE" >> $GITHUB_OUTPUT
 
     - name: Checkout
       uses: actions/checkout@v4
