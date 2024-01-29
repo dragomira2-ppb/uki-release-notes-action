@@ -11,7 +11,7 @@ ENV_VARIABLES = {
     'ENVIRONMENT' : os.environ.get('ENVIRONMENT', ''),
 
     #release details env variables
-    'COMMIT_MESSAGE' : os.environ.get('COMMIT_MESSAGE_ENCODED', 'No changes between releases'),
+    'COMMIT_MESSAGE' : base64.b64decode(os.environ.get('COMMIT_MESSAGE_ENCODED', '')).decode('utf-8'),
     'RELEASE_NAME' : os.environ.get('RELEASE_NAME', ''),
     'BUILD_NUMBER' : os.environ.get('BUILD_NUMBER', ''),
 

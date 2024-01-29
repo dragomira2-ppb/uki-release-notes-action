@@ -87,6 +87,8 @@ runs:
         COMMIT_MESSAGE=$(git log --pretty=medium ${{ steps.get_tags.outputs.old_tag }}..${{ steps.get_tags.outputs.new_tag }} | tr '\n' '\n')
         echo "$COMMIT_MESSAGE" >> $GITHUB_OUTPUT
         echo "$EOF" >> $GITHUB_OUTPUT
+        COMMIT_MESSAGE_ENCODED=$(echo $COMMIT_MESSAGE | base64 -w0)
+        echo "COMMIT_MESSAGE_ENCODED=$COMMIT_MESSAGE_ENCODED" >> $GITHUB_ENV
 
     - name: Checkout
       uses: actions/checkout@v4
@@ -110,7 +112,6 @@ runs:
           echo "REPOSITORY=https://github.com/${{ github.repository }}" >> $GITHUB_ENV
           echo "ENVIRONMENT=${{ inputs.environment }}" >> $GITHUB_ENV
           echo "BUILD_NUMBER=${{ steps.get_tags.outputs.new_tag }}" >> $GITHUB_ENV
-          echo "COMMIT_MESSAGE=${{ steps.release_description.outputs.release_message }}" >> $GITHUB_ENV
           echo "BRAND=${{ inputs.brand }}" >> $GITHUB_ENV
           echo "RELEASE_NAME=${{ steps.get_tags.outputs.release_name }}" >> $GITHUB_ENV
           echo "CONFLUENCE_USERNAME=${{ inputs.confluenceUsername }}" >> $GITHUB_ENV
