@@ -143,4 +143,4 @@ runs:
         body: ${{ steps.release_description.outputs.release_message == '' && 'No changes between releases' || steps.release_description.outputs.release_message }}
         prerelease: ${{ env.ENVIRONMENT == 'prd' && 'false' || 'true' }}
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ inputs.apiToken }}
