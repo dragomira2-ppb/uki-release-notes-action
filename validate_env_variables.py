@@ -1,6 +1,6 @@
 import os
 import logging
-import base64
+
 
 ENV_VARIABLES = {
     # application env variables
@@ -11,7 +11,7 @@ ENV_VARIABLES = {
     'ENVIRONMENT': os.environ.get('ENVIRONMENT', ''),
 
     # release details env variables
-    'COMMIT_MESSAGE': base64.b64decode(os.environ.get('COMMIT_MESSAGE_ENCODED', '')).decode('utf-8'),
+    'COMMIT_MESSAGE_ENCODED': os.environ.get('COMMIT_MESSAGE_ENCODED', '')),
     'RELEASE_NAME': os.environ.get('RELEASE_NAME', ''),
     'BUILD_NUMBER': os.environ.get('BUILD_NUMBER', '')
 }

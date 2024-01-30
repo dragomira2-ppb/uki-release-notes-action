@@ -1,9 +1,10 @@
 from datetime import datetime
 import re
+import base64
 from validate_env_variables import ENV_VARIABLES
 
 def parse_commit_data():
-    input_release_commits = ENV_VARIABLES['COMMIT_MESSAGE']
+    input_release_commits = base64.b64decode(ENV_VARIABLES['COMMIT_MESSAGE_ENCODED']).decode('utf-8')
 
     commit_data_list = []
     commit_pattern = re.compile(
