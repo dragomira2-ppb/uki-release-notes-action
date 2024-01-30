@@ -24,13 +24,18 @@ def generate_commits_table(data):
     table_header = '<tr><th>Commit ref</th><th>Author</th><th>Date</th><th>Commit message</th></tr>'
     table_data = []
 
-    for entry in data:
-        commit_link =  f'<a href="{ENV_VARIABLES["REPOSITORY"]}/commit/{entry["commit"]}">#{entry["commit"][:7]}</a>'
-        commit_lines = entry['commit_message'].split('\n')
-        commit_message_formatted = ''.join('- ' + line.strip() + '<br/><br/>' for line in commit_lines[:-1]) + '- ' + commit_lines[-1].strip()
+    if len(data) == 0:
         table_data.append(
-        f'<tr><td style="text-align: center">{commit_link}</td><td style="text-align: center">{entry["author"]}</td><td style="text-align: center">{entry["date"]}</td><td>{commit_message_formatted}</td></tr>'
+            '<tr><td colspan=4>No new commits were added from the previous release on this environment</td></tr>'
         )
+    else:
+        for entry in data:
+            commit_link =  f'<a href="{ENV_VARIABLES["REPOSITORY"]}/commit/{entry["commit"]}">#{entry["commit"][:7]}</a>'
+            commit_lines = entry['commit_message'].split('\n')
+            commit_message_formatted = ''.join('- ' + line.strip() + '<br/><br/>' for line in commit_lines[:-1]) + '- ' + commit_lines[-1].strip()
+            table_data.append(
+            f'<tr><td style="text-align: center">{commit_link}</td><td style="text-align: center">{entry["author"]}</td><td style="text-align: center">{entry["date"]}</td><td>{commit_message_formatted}</td></tr>'
+            )
 
     return table_header + ''.join(table_data)
 

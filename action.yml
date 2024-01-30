@@ -83,9 +83,7 @@ runs:
         echo "$(git log --pretty=medium ${{ steps.get_tags.outputs.old_tag }}..${{ steps.get_tags.outputs.new_tag }} | tr '\n' '\n')" >> $GITHUB_OUTPUT
         echo "$EOF" >> $GITHUB_OUTPUT
         COMMIT_MESSAGE=$(git log --pretty=medium ${{ steps.get_tags.outputs.old_tag }}..${{ steps.get_tags.outputs.new_tag }} | tr '\n' '@')
-        echo "$COMMIT_MESSAGE"
         COMMIT_MESSAGE_ENCODED=$(echo "$COMMIT_MESSAGE" | base64 -w0)
-        echo $COMMIT_MESSAGE_ENCODED
         echo "COMMIT_MESSAGE_ENCODED=$COMMIT_MESSAGE_ENCODED" >> $GITHUB_ENV
 
     - name: Checkout
