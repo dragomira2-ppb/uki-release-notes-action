@@ -5,11 +5,10 @@ from validate_env_variables import ENV_VARIABLES
 
 def parse_commit_data():
     input_release_commits = base64.b64decode(ENV_VARIABLES['COMMIT_MESSAGE_ENCODED']).decode('utf-8')
-    input_release_commits = input_release_commits.replace('@', '\n')
 
     commit_data_list = []
     commit_pattern = re.compile(
-        r'commit (\S+)\nAuthor: (.*?)\nDate:\s+([^\n]+)\n\n(.*?)(?=\n\ncommit|\Z)', re.DOTALL)
+        r'commit (\S+)@Author: (.*?)@Date:\s+([^\n]+)@(.*?)(?=@@commit|\Z)', re.DOTALL)
 
     for match in commit_pattern.finditer(input_release_commits):
         commit_data = {
