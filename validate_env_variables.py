@@ -19,7 +19,6 @@ ENV_VARIABLES = {
 CONFLUENCE_VARS = {
 
     'CONFLUENCE_USERNAME': os.environ.get('CONFLUENCE_USERNAME', ''),
-    'CONFLUENCE_URL': os.environ.get('CONFLUENCE_URL', ''),
     'CONFLUENCE_PAGE_ID': os.environ.get('CONFLUENCE_PAGE_ID', ''),
     'CONFLUENCE_SPACE': os.environ.get('CONFLUENCE_SPACE', ''),
     'CONFLUENCE_API_TOKEN': os.environ.get('CONFLUENCE_API_TOKEN', ''),
