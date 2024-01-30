@@ -122,12 +122,11 @@ runs:
           echo "CONFLUENCE_EXISTING_PAGE=${{ inputs.confluenceExistingPage }}" >> $GITHUB_ENV
           echo "CONFLUENCE_PAGE_VERSION=${{ inputs.confluencePageVersion }}" >> $GITHUB_ENV
       shell: bash
-    
-    - name: Validate inputs
+
+    - name: Run main script
       shell: bash
       run: |
-        ls -la /home/runner/work/msb/msb
-        python validate_env_variables.py
+        python script.py
 
     - name: Checkout code
       uses: actions/checkout@v4

@@ -4,6 +4,8 @@ from validate_env_variables import publish_page_to_confluence
 
 def publish_page_to_confluence(html_content):
 
+    print("Publish to confluence: " + publish_page_to_confluence)
+
     if publish_page_to_confluence == True:
 
         api_endpoint = "/rest/api/content"
