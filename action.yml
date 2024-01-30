@@ -26,12 +26,8 @@ inputs:
     description: "Confluence Username"
     required: false
 
-  confluenceUrl:
-    description: "Confluence URL"
-    required: false
-
-  confluencePageId:
-    description: "Confluence Page ID"
+  confluenceAncestorPageId:
+    description: "Ancestor Confluence page ID where following release pages will be created"
     required: false
 
   confluenceSpace:
@@ -116,7 +112,7 @@ runs:
           echo "RELEASE_NAME=${{ steps.get_tags.outputs.release_name }}" >> $GITHUB_ENV
           echo "CONFLUENCE_USERNAME=${{ inputs.confluenceUsername }}" >> $GITHUB_ENV
           echo "CONFLUENCE_URL=${{ inputs.confluenceUrl }}" >> $GITHUB_ENV
-          echo "CONFLUENCE_PAGE_ID=${{ inputs.confluencePageId }}" >> $GITHUB_ENV
+          echo "CONFLUENCE_PAGE_ID=${{ inputs.confluenceAncestorPageId }}" >> $GITHUB_ENV
           echo "CONFLUENCE_SPACE=${{ inputs.confluenceSpace }}" >> $GITHUB_ENV
           echo "CONFLUENCE_API_TOKEN=${{ inputs.confluenceApiToken }}" >> $GITHUB_ENV
           echo "CONFLUENCE_EXISTING_PAGE=${{ inputs.confluenceExistingPage }}" >> $GITHUB_ENV

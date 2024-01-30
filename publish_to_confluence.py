@@ -1,44 +1,42 @@
 import requests
-from validate_env_variables import ENV_VARIABLES
-from validate_env_variables import publish_page_to_confluence
+from validate_env_variables import ENV_VARIABLES, CONFLUENCE_VARS
+
+import logging
+
 
 def publish_page_to_confluence(html_content):
 
-    print("Publish to confluence: " + publish_page_to_confluence)
+    api_endpoint = "https://flutteruki.atlassian.net/wiki/rest/api/content"
 
-    if publish_page_to_confluence == True:
-
-        api_endpoint = "/rest/api/content"
-    
-        #modifying existing page for testing purposes
-        new_page_payload = {
-            "id" : ENV_VARIABLES['CONFLUENCE_EXISTING_PAGE'],
-            "type": "page",
-            "title": ENV_VARIABLES['TLA_NAME'] + ' ' + ENV_VARIABLES['BRAND'] + ' ' + ENV_VARIABLES['RELEASE_NAME'],
-            "space":{
-                  "key": ENV_VARIABLES['CONFLUENCE_SPACE']
-             },
-            "body": {
-                "storage": {
-                    "value": f"{html_content}",
-                    "representation": "storage",
-                }
-            },
-            "version": {
-                "number":  ENV_VARIABLES['CONFLUENCE_PAGE_VERSION']
+    # modifying existing page for testing purposes
+    new_page_payload = {
+        "id": CONFLUENCE_VARS['CONFLUENCE_EXISTING_PAGE'],
+        "type": "page",
+        "title": ENV_VARIABLES['TLA_NAME'] + ' ' + ENV_VARIABLES['BRAND'] + ' ' + ENV_VARIABLES['RELEASE_NAME'],
+        "space": {
+            "key": CONFLUENCE_VARS['CONFLUENCE_SPACE']
+        },
+        "body": {
+            "storage": {
+                "value": f"{html_content}",
+                "representation": "storage",
             }
+        },
+        "version": {
+            "number":  CONFLUENCE_VARS['CONFLUENCE_PAGE_VERSION']
         }
-    
-        # Headers for authentication
-        headers = {
-            "Content-Type": "application/json",
-            "X-Atlassian-Token": "no-check"
-        }
+    }
 
-        print("Confluence input payload: " + new_page_payload)
-    
-        response = requests.put(f"{ENV_VARIABLES['CONFLUENCE_URL']}{api_endpoint}/{ENV_VARIABLES['CONFLUENCE_EXISTING_PAGE']}",headers=headers, json=new_page_payload, auth=(ENV_VARIABLES['CONFLUENCE_USERNAME'], ENV_VARIABLES['CONFLUENCE_API_TOKEN']))
+    # Headers for authentication
+    headers = {
+        "Content-Type": "application/json",
+        "X-Atlassian-Token": "no-check"
+    }
+    logging.info(f"Confluence input payload: {new_page_payload}")
 
-        print("Confluence REST API call invoked, response: " + response)
-        if not "200" in response:
-            raise ValueError(f"Error occured when calling Confluence REST API - {response}")
+    response = requests.put(f"{api_endpoint}/{CONFLUENCE_VARS['CONFLUENCE_EXISTING_PAGE']}",
+                            headers=headers, json=new_page_payload, auth=(CONFLUENCE_VARS['CONFLUENCE_USERNAME'], CONFLUENCE_VARS['CONFLUENCE_API_TOKEN']))
+    logging.info(f"Confluence REST API call invoked, response: {response}")
+    if not "200" in response:
+        raise ValueError(
+            f"Error occured when calling Confluence REST API - {response}")
