@@ -9,7 +9,11 @@ from validate_env_variables import are_confluence_vars_valid, are_mandatory_vars
 def main():
       if are_mandatory_vars_valid() == True:
           commit_data = parse_commit_data()
+          logging.info(f"Commit data: {commit_data}")
+
           html_content = generate_html_content(commit_data)
+          logging.info(f"HTML Content generated: {html_content}")
+
           if are_confluence_vars_valid() == True:
               publish_page_to_confluence(html_content)
 
