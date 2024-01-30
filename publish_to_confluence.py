@@ -1,7 +1,6 @@
 import requests
 from validate_env_variables import ENV_VARIABLES, CONFLUENCE_VARS
 
-import json
 import logging
 
 
@@ -37,7 +36,7 @@ def publish_page_to_confluence(html_content):
 
     response = requests.put(f"{api_endpoint}/{CONFLUENCE_VARS['CONFLUENCE_EXISTING_PAGE']}",
                             headers=headers, json=new_page_payload, auth=(CONFLUENCE_VARS['CONFLUENCE_USERNAME'], CONFLUENCE_VARS['CONFLUENCE_API_TOKEN']))
-    logging.info(f"Confluence REST API call invoked, response: {json.dumps(response.__dict__, indent=4, sort_keys=True)}")
+    logging.info(f"Confluence REST API call invoked, response: {response.content}")
     if not "200" in response:
         raise ValueError(
             f"Error occured when calling Confluence REST API - {response}")

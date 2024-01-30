@@ -84,7 +84,7 @@ runs:
         echo "$EOF" >> $GITHUB_OUTPUT
         COMMIT_MESSAGE=$(git log --pretty=medium ${{ steps.get_tags.outputs.old_tag }}..${{ steps.get_tags.outputs.new_tag }} | tr '\n' '\n')
         echo "$COMMIT_MESSAGE"
-        COMMIT_MESSAGE_ENCODED=$(echo "$COMMIT_MESSAGE" | base64 -w0)
+        COMMIT_MESSAGE_ENCODED=$(echo "$COMMIT_MESSAGE" | base64)
         echo $COMMIT_MESSAGE_ENCODED
         echo "COMMIT_MESSAGE_ENCODED=$COMMIT_MESSAGE_ENCODED" >> $GITHUB_ENV
 
@@ -113,7 +113,6 @@ runs:
           echo "BRAND=${{ inputs.brand }}" >> $GITHUB_ENV
           echo "RELEASE_NAME=${{ steps.get_tags.outputs.release_name }}" >> $GITHUB_ENV
           echo "CONFLUENCE_USERNAME=${{ inputs.confluenceUsername }}" >> $GITHUB_ENV
-          echo "CONFLUENCE_URL=${{ inputs.confluenceUrl }}" >> $GITHUB_ENV
           echo "CONFLUENCE_PAGE_ID=${{ inputs.confluenceAncestorPageId }}" >> $GITHUB_ENV
           echo "CONFLUENCE_SPACE=${{ inputs.confluenceSpace }}" >> $GITHUB_ENV
           echo "CONFLUENCE_API_TOKEN=${{ inputs.confluenceApiToken }}" >> $GITHUB_ENV
