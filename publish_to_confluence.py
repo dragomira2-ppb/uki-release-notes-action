@@ -32,7 +32,11 @@ def publish_page_to_confluence(html_content):
             "Content-Type": "application/json",
             "X-Atlassian-Token": "no-check"
         }
+
+        print("Confluence input payload: " + new_page_payload)
     
         response = requests.put(f"{ENV_VARIABLES['CONFLUENCE_URL']}{api_endpoint}/{ENV_VARIABLES['CONFLUENCE_EXISTING_PAGE']}",headers=headers, json=new_page_payload, auth=(ENV_VARIABLES['CONFLUENCE_USERNAME'], ENV_VARIABLES['CONFLUENCE_API_TOKEN']))
+
+        print("Confluence REST API call invoked, response: " + response)
         if not "200" in response:
             raise ValueError(f"Error occured when calling Confluence REST API - {response}")
