@@ -60,6 +60,7 @@ def are_mandatory_vars_valid():
     for key, value in ENV_VARIABLES.items():
         if not value:
             error_message = f"Error: {key} cannot be empty or None."
+            logging.error(error_message)
             raise ValueError(error_message)
 
     logging.info('All values are present.')

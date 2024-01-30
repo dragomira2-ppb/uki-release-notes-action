@@ -7,14 +7,11 @@ import logging
 from validate_env_variables import are_confluence_vars_valid, are_mandatory_vars_valid
 
 def main():
-    try:
-        if are_mandatory_vars_valid() == True:
-            commit_data = parse_commit_data()
-            html_content = generate_html_content(commit_data)
-            if are_confluence_vars_valid() == True:
-                publish_page_to_confluence(html_content)
-    except ValueError as e:
-        logging.error(str(e))
+      if are_mandatory_vars_valid() == True:
+          commit_data = parse_commit_data()
+          html_content = generate_html_content(commit_data)
+          if are_confluence_vars_valid() == True:
+              publish_page_to_confluence(html_content)
 
 if __name__ == "__main__":
     main()

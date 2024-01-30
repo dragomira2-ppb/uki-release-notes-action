@@ -10,7 +10,7 @@ def publish_page_to_confluence(html_content):
 
     # modifying existing page for testing purposes
     new_page_payload = {
-        "id": CONFLUENCE_VARS['CONFLUENCE_EXISTING_PAGE'],
+        "id": int(CONFLUENCE_VARS['CONFLUENCE_EXISTING_PAGE']),
         "type": "page",
         "title": ENV_VARIABLES['TLA_NAME'] + ' ' + ENV_VARIABLES['BRAND'] + ' ' + ENV_VARIABLES['RELEASE_NAME'],
         "space": {
@@ -23,7 +23,7 @@ def publish_page_to_confluence(html_content):
             }
         },
         "version": {
-            "number":  CONFLUENCE_VARS['CONFLUENCE_PAGE_VERSION']
+            "number":  int(CONFLUENCE_VARS['CONFLUENCE_PAGE_VERSION'])
         }
     }
 
