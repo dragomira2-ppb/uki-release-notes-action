@@ -5,7 +5,13 @@ echo "Checking mandatory input variables..."
 
 declare -A mandatory_vars
 
-mandatory_vars=( ["tla"]="${{ inputs.tla }}" ["environment"]="${{ inputs.environment }}" ["brand"]="${{ inputs.brand }}" ["version"]="${{ inputs.version }}" ["appVersion"]="${{ inputs.appVersion }}")
+version=${{ inputs.version }}
+appVersion=${{ inputs.appVersion }}
+brand=${{ inputs.brand }}
+env=${{ inputs.environment }}
+tla=${{ inputs.tla }}
+
+mandatory_vars=( ["tla"]="${tla}" ["environment"]="${env}" ["brand"]="${brand}" ["version"]="${version}" ["appVersion"]="${appVersion}")
 
 for key in "${!mandatory_vars[@]}"
 do
@@ -17,16 +23,12 @@ done
 
 echo "All variables are present. Continuing..."
 
-version=v${{ inputs.version }
-brand=${{ inputs.brand }}
-env=${{ inputs.environment }}
-
 echo "Getting sorted tags..."
 tags=$(git tag -l --sort=v:refname)
 
 echo "Tags: $tags"
 old_tag=$( (echo "$tags" | grep $env | grep $brand || echo "$tags") | tail -n 1)
-new_tag=$version$brand-$env
+new_tag=v$version$brand-$env
 
 echo "Old tag: $old_tag - New tag: $new_tag"
 echo "Creating a new tag in git..."
@@ -50,6 +52,6 @@ fi
 
 EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
 echo "release_message<<$EOF" >> "$GITHUB_OUTPUT"
-echo -e "This release uses a published package with version ${{ inputs.appVersion }}.\n\n" >> "$GITHUB_OUTPUT"
+echo -e "This release uses a published package with version $appVersion\n\n" >> "$GITHUB_OUTPUT"
 echo "$release_message" >> "$GITHUB_OUTPUT"
 echo "$EOF" >> "$GITHUB_OUTPUT"
