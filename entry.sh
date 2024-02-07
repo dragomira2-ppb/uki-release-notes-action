@@ -5,12 +5,6 @@ echo "Checking mandatory input variables..."
 
 declare -A mandatory_vars
 
-version=${{ inputs.version }}
-appVersion=${{ inputs.appVersion }}
-brand=${{ inputs.brand }}
-env=${{ inputs.environment }}
-tla=${{ inputs.tla }}
-
 mandatory_vars=( ["tla"]="${tla}" ["environment"]="${env}" ["brand"]="${brand}" ["version"]="${version}" ["appVersion"]="${appVersion}")
 
 for key in "${!mandatory_vars[@]}"
