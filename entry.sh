@@ -52,7 +52,11 @@ if [  -z "${release_message}"  ] || [ "${release_message}" == ""  ]; then
     printf '\n'
     echo "$EOF"
   } >> "$GITHUB_OUTPUT"
+    echo "$info_message"
+    echo "$release_message"
 else
+  echo "$info_message"
+  echo "$release_message"
   {
     echo "release_message<<$EOF"
     printf '\n'
