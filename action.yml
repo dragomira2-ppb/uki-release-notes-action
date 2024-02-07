@@ -34,7 +34,7 @@ runs:
     - name: Generate Release Notes
       id: generate_release
       shell: bash
-      run: sh "${{ github.action_path }}/entry.sh"
+      run: /bin/bash "${{ github.action_path }}/entry.sh"
 
     - name: Create GitHub release
       id: create_release
