@@ -25,27 +25,26 @@ old_tag=$( (echo "$tags" | grep $env | grep $brand || echo "$tags") | tail -n 1)
 new_tag=v$version$brand-$env
 
 echo "Old tag: $old_tag - New tag: $new_tag"
-echo "Creating a new tag in git..."
+echo "Creating a new tag..."
 git tag "${new_tag}"
 
 release_name="Release $new_tag"
-echo "Created new release ${release_name}"
+echo "Created new ${release_name}"
 
 echo "old_tag=$old_tag" >> "$GITHUB_OUTPUT"
 echo "new_tag=$new_tag" >> "$GITHUB_OUTPUT"
 echo "release_name=$release_name" >> "$GITHUB_OUTPUT"
 
 echo "Fetching commits between tags - $old_tag and $new_tag..."
-release_message=$(git log --pretty=medium "$old_tag".."$new_tag"| tr '\n' '\n')
+release_message="This release uses a published package with version $appVersion '\n' '\n' $(git log --pretty=medium "$old_tag".."$new_tag"| tr '\n' '\n')"
 
 if [  -z "${release_message}"  ] || [ "${release_message}" == ""  ]; then
-  release_message="No new changes between old tag ${old_tag} and new tag ${new_tag}."
+  echo "release_message<<$EOF" >> "$GITHUB_OUTPUT"
+  echo "${release_message} No new changes between old tag ${old_tag} and new tag ${new_tag}."
+  echo "$EOF" >> "$GITHUB_OUTPUT"
 else
-  echo "${release_message}"
+  EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+  echo "release_message<<$EOF" >> "$GITHUB_OUTPUT"
+  echo "${release_message}" >> "$GITHUB_OUTPUT"
+  echo "$EOF" >> "$GITHUB_OUTPUT"
 fi
-
-EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
-echo "release_message<<$EOF" >> "$GITHUB_OUTPUT"
-echo -e "This release uses a published package with version $appVersion\n\n" >> "$GITHUB_OUTPUT"
-echo "$release_message" >> "$GITHUB_OUTPUT"
-echo "$EOF" >> "$GITHUB_OUTPUT"
