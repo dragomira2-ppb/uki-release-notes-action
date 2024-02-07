@@ -36,14 +36,15 @@ echo "new_tag=$new_tag" >> "$GITHUB_OUTPUT"
 echo "release_name=$release_name" >> "$GITHUB_OUTPUT"
 
 echo "Fetching commits between tags - $old_tag and $new_tag..."
+EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
 release_message=$(git log --pretty=medium "$old_tag".."$new_tag" | tr '\n' '\n')
 
 if [  -z "${release_message}"  ] || [ "${release_message}" == ""  ]; then
-  echo "release_message<<EOF" >> "$GITHUB_OUTPUT"
+  echo "release_message<<$EOF" >> "$GITHUB_OUTPUT"
   printf "This release uses a published package with version $appVersion '\n' '\n' No new changes between old tag ${old_tag} and new tag ${new_tag}." >> "$GITHUB_OUTPUT"
-  echo "EOF" >> "$GITHUB_OUTPUT"
+  echo "$EOF" >> "$GITHUB_OUTPUT"
 else
-  echo "release_message<<EOF" >> "$GITHUB_OUTPUT"
-  printf "This release uses a published package with version $appVersion '\n' '\n' $(git log --pretty=medium $old_tag..$new_tag | tr '\n' '\n')" >> "$GITHUB_OUTPUT"
-  echo "EOF" >> "$GITHUB_OUTPUT"
+  echo "release_message<<$EOF" >> "$GITHUB_OUTPUT"
+  printf "This release uses a published package with version $appVersion '\n' '\n' $(git log --pretty=medium $old_tag..$new_tag | tr '\n' '\n') '\n" >> "$GITHUB_OUTPUT"
+  echo "$EOF" >> "$GITHUB_OUTPUT"
 fi
