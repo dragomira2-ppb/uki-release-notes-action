@@ -21,7 +21,7 @@ echo "Getting sorted tags..."
 tags=$(git tag -l --sort=v:refname)
 
 echo "Tags: $tags"
-old_tag=$( (echo "$tags" | grep $env | grep $brand || echo "$tags") | tail -n 1)
+old_tag=$( (echo "$tags" | grep "$env" | grep "$brand" || echo "$tags") | tail -n 1)
 new_tag=v$version$brand-$env
 
 echo "Old tag: $old_tag - New tag: $new_tag"
@@ -31,20 +31,33 @@ git tag "${new_tag}"
 release_name="Release $new_tag"
 echo "Created new ${release_name}"
 
-echo "old_tag=$old_tag" >> "$GITHUB_OUTPUT"
-echo "new_tag=$new_tag" >> "$GITHUB_OUTPUT"
-echo "release_name=$release_name" >> "$GITHUB_OUTPUT"
+{
+  echo "old_tag=$old_tag"
+  echo "new_tag=$new_tag"
+  echo "release_name=$release_name"
+}  >> "$GITHUB_OUTPUT"
 
 echo "Fetching commits between tags - $old_tag and $new_tag..."
 EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
 release_message=$(git log --pretty=medium "$old_tag".."$new_tag" | tr '\n' '\n')
+info_message="This release uses a published package with version $appVersion"
 
 if [  -z "${release_message}"  ] || [ "${release_message}" == ""  ]; then
-  echo "release_message<<$EOF" >> "$GITHUB_OUTPUT"
-  printf "This release uses a published package with version $appVersion '\n' '\n' No new changes between old tag ${old_tag} and new tag ${new_tag}. '\n'" >> "$GITHUB_OUTPUT"
-  echo "$EOF" >> "$GITHUB_OUTPUT"
+  {
+    echo "release_message<<$EOF"
+    echo "${info_message}"
+    printf '\n'
+    echo "No new changes between old tag ${old_tag} and new tag ${new_tag}."
+    printf '\n'
+    echo "$EOF"
+  } >> "$GITHUB_OUTPUT"
 else
-  echo "release_message<<$EOF" >> "$GITHUB_OUTPUT"
-  printf "This release uses a published package with version $appVersion '\n' '\n' $(git log --pretty=medium $old_tag..$new_tag | tr '\n' '\n') '\n'" >> "$GITHUB_OUTPUT"
-  echo "$EOF" >> "$GITHUB_OUTPUT"
+  {
+    echo "release_message<<$EOF"
+    echp "${info_message}"
+    printf '\n'
+    echo "${release_message}"
+    printf '\n'
+    echo "$EOF"
+  } >> "$GITHUB_OUTPUT"
 fi
