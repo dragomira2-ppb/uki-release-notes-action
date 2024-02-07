@@ -3,16 +3,16 @@ description: "Generate release notes and publish to confluence"
 
 inputs:
 
-  tlaName:
-    description: "TLA Name"
+  tla:
+    description: "TLA name (ex awstlabf)"
     required: true
 
   environment:
-    description: "Environment"
+    description: "Environment used ex (qa)"
     required: true
 
   brand:
-    description: "Brand Name"
+    description: "Brand Name (ex bf)"
     required: true
 
   version:
