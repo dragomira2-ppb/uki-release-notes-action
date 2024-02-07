@@ -45,6 +45,7 @@ info_message="This release uses a published package with version $appVersion"
 if [  -z "${release_message}"  ] || [ "${release_message}" == ""  ]; then
   {
     echo "release_message<<$EOF"
+    printf '\n'
     echo "${info_message}"
     printf '\n'
     echo "No new changes between old tag ${old_tag} and new tag ${new_tag}."
@@ -54,7 +55,8 @@ if [  -z "${release_message}"  ] || [ "${release_message}" == ""  ]; then
 else
   {
     echo "release_message<<$EOF"
-    echp "${info_message}"
+    printf '\n'
+    echo "${info_message}"
     printf '\n'
     echo "${release_message}"
     printf '\n'
