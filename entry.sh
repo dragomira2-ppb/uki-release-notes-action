@@ -46,7 +46,7 @@ if [  -z "${release_message}"  ] || [ "${release_message}" == ""  ]; then
   {
     echo "release_message<<$EOF"
     printf '\n'
-    echo "${info_message}"
+    echo "$info_message"
     printf '\n'
     echo "No new changes between old tag ${old_tag} and new tag ${new_tag}."
     printf '\n'
@@ -56,10 +56,12 @@ else
   {
     echo "release_message<<$EOF"
     printf '\n'
-    echo "${info_message}"
+    echo "$info_message"
     printf '\n'
-    echo "${release_message}"
+    echo "$release_message"
     printf '\n'
     echo "$EOF"
   } >> "$GITHUB_OUTPUT"
+
+
 fi
