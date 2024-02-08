@@ -47,7 +47,7 @@ EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
 release_message=$(git log --pretty=medium "$old_tag".."$new_tag" | tr '\n' '\n')
 info_message=""
 
-if [ -n "${appVersion}" ] || [ "${appVersion}" != " " ]; then
+if [ -n "${appVersion}" ] && [ "${appVersion}" != " " ]; then
   info_message="This release uses a published package with version $appVersion"
 fi
 
@@ -78,7 +78,7 @@ else
       printf '\n'
       echo "$body"
     fi
-    printf '\n Commits \n'
+    printf '\n Commits \n\n'
     echo "$release_message"
     printf '\n'
     echo "$EOF"
