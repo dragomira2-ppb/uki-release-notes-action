@@ -11,17 +11,21 @@ inputs:
     description: "Environment used ex (qa)"
     required: true
 
-  brand:
-    description: "Brand Name (ex bf)"
-    required: true
-
   version:
     description: "Build number convention (ex 1.0.0)"
     required: true
 
+  brand:
+    description: "Brand Name (ex bf)"
+    required: false
+
   appVersion:
     description: "The version of the published package used for this release (ex. 1.0.192)"
-    required: true
+    required: false
+
+  additionalBodyInfo:
+    description: "Additional information to be passed in the release message"
+    required: false
 
 runs:
   using: composite
@@ -41,6 +45,7 @@ runs:
         brand: ${{ inputs.brand }}
         env: ${{ inputs.environment }}
         tla: ${{ inputs.tla }}
+        body: ${{ inputs.additionalBodyInfo }}
 
     - name: Create GitHub release
       id: create_release
