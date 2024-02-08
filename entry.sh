@@ -26,7 +26,7 @@ echo "Getting sorted tags..."
 tags=$(git tag -l --sort=v:refname)
 
 echo "Tags: $tags"
-old_tag=$( (echo "$tags" | grep -w "$env" | grep -w "$brand" || echo "$tags") | tail -n 1)
+old_tag=$( (echo "$tags" | grep -w "$env" | grep "$brand" || echo "$tags") | tail -n 1)
 new_tag=v$version$brand-$env
 
 echo "Old tag: $old_tag - New tag: $new_tag"
