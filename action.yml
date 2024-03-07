@@ -1,13 +1,9 @@
 name: "Generate release notes"
-description: "Generate release notes and publish to confluence"
+description: "Generate release notes for a Github project"
 
 inputs:
 
-  tla:
-    description: "TLA name (ex awstlabf)"
-    required: true
-
-  environment:
+  deployEnvironment:
     description: "Environment used ex (qa)"
     required: true
 
@@ -36,24 +32,23 @@ runs:
         fetch-depth: 0
 
     - name: Generate Release Notes
-      id: generate_release
+      id: generate_release_notes
       shell: bash
       run: /bin/bash "${{ github.action_path }}/entry.sh"
       env:
         version: ${{ inputs.version }}
         appVersion: ${{ inputs.appVersion }}
         brand: ${{ inputs.brand }}
-        env: ${{ inputs.environment }}
-        tla: ${{ inputs.tla }}
+        env: ${{ inputs.deployEnvironment }}
         body: ${{ inputs.additionalBodyInfo }}
 
     - name: Create GitHub release
       id: create_release
       uses: actions/create-release@v1
       with:
-        tag_name: ${{ steps.generate_release.outputs.new_tag }}
-        release_name: ${{ steps.generate_release.outputs.release_name }}
-        body: ${{ steps.generate_release.outputs.release_message }}
+        tag_name: ${{ steps.generate_release_notes.outputs.new_tag }}
+        release_name: ${{ steps.generate_release_notes.outputs.release_name }}
+        body: ${{ steps.generate_release_notes.outputs.release_message }}
         prerelease: ${{ inputs.environment == 'prd' && 'false' || 'true' }}
       env:
         GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
