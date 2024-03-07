@@ -40,7 +40,8 @@ existing_new_tag=$(echo "$tags" | grep -w "$new_tag")
 
 if [ -n "${existing_new_tag}" ] && [ "${existing_new_tag}" != " " ]; then
     echo "Tag $new_tag already existing, a new release will not be created."
-    exit 1
+else
+  exit 1
 fi
 
 info_message=""
