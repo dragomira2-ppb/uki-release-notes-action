@@ -3,17 +3,17 @@ set -e
 
 echo "Checking mandatory input variables..."
 
-#declare -A mandatory_vars
-#
-#mandatory_vars=( ["env"]="${env}" ["version"]="${version}")
-#
-#for key in "${!mandatory_vars[@]}"
-#do
-#  if [  "${mandatory_vars[$key]}" == " " ] || [ -z "${mandatory_vars[$key]}" ]; then
-#      echo "'${key}' variable is empty, failing..."
-#      exit 1
-#  fi
-#done
+declare -A mandatory_vars
+
+mandatory_vars=( ["env"]="${env}" ["version"]="${version}")
+
+for key in "${!mandatory_vars[@]}"
+do
+  if [  "${mandatory_vars[$key]}" == " " ] || [ -z "${mandatory_vars[$key]}" ]; then
+      echo "'${key}' variable is empty, failing..."
+      exit 1
+  fi
+done
 found=false
 
 echo "All variables are present. Continuing..."
@@ -50,7 +50,7 @@ else
     if [ "$found" = true ] ; then
     {
     old_tag=$( (echo "${tags}" | grep -w "$env") | tail -n 1)
-    if [[ $old_tag =~ "-" ]]; then
+    if [[ $old_tag = *"-"* ]]; then
       old_tag=""
     fi
     }
