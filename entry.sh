@@ -68,6 +68,9 @@ fi
 info_message=""
 release_message=""
 
+echo "Creating a new tag $new_tag..."
+git tag "${new_tag}"
+
 if [  -n "${old_tag}"  ] && [ "${old_tag}" != " "  ]; then
   {
   echo "Old tag: $old_tag - New tag: $new_tag"
@@ -76,8 +79,6 @@ if [  -n "${old_tag}"  ] && [ "${old_tag}" != " "  ]; then
   }
 fi
 
-echo "Creating a new tag $new_tag..."
-#git tag "${new_tag}"
 release_name="Release $new_tag"
 echo "Created new ${release_name}!"
 
