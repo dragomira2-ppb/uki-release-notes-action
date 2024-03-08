@@ -52,3 +52,4 @@ runs:
         prerelease: ${{ inputs.environment == 'prd' && 'false' || 'true' }}
       env:
         GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
+      if: steps.generate_release_notes.outputs.new_tag != ''
