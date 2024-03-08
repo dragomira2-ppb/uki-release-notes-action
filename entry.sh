@@ -37,7 +37,7 @@ if [ -n "${brand}" ] && [ "${brand}" != " " ]; then
      echo "Fetching last tag on $brand..."
      old_tag=$( (echo "${tags}" | grep "$env" | grep -w "$brand") | tail -n 1)
      if [ -z "${old_tag}" ] || [ "${old_tag}" == " " ]; then
-       echo "Could not find an existing tag on brand {$brand}"
+       echo "Could not find an existing tag on brand {$brand} and environment {$env}"
      else
        echo "Last tag on { $brand }: $old_tag"
      fi

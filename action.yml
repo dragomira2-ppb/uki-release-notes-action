@@ -49,7 +49,7 @@ runs:
         tag_name: ${{ steps.generate_release_notes.outputs.new_tag }}
         release_name: ${{ steps.generate_release_notes.outputs.release_name }}
         body: ${{ steps.generate_release_notes.outputs.release_message }}
-        prerelease: ${{ inputs.environment == 'prd' && 'false' || 'true' }}
+        prerelease: ${{ inputs.deployEnvironment == 'prd' && 'false' || 'true' }}
       env:
         GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
       if: steps.generate_release_notes.outputs.new_tag != ''
