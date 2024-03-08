@@ -58,8 +58,7 @@ else
   }
 fi
 
-
-if [[ $tags =~ $new_tag( |$) ]];then
+if [[ $tags = *$new_tag* ]];then
   {
     echo "Tag $new_tag already existing, a new release will not be created."
     exit 0
