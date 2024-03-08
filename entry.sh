@@ -14,49 +14,72 @@ do
       exit 1
   fi
 done
-
-declare -A optional_vars
-
-# shellcheck disable=SC2034
-optional_vars=( ['brand']="${brand}" ['appVersion']="${appVersion}" ['body']="${body}" )
+found=false
 
 echo "All variables are present. Continuing..."
-
 echo "Getting sorted tags..."
 tags=$(git tag -l --sort=v:refname)
+if [ -n "${tags}" ] && [ "${tags}" != " " ]; then
+  echo "Tags: $tags"
+  found=true
+else
+  echo "No tags found, continuing..."
+fi
 
-old_tag=$( (echo "$tags" | grep -w "$env") | tail -n 1)
-new_tag=v$version-$env
+new_tag=v$version$env
 
 if [ -n "${brand}" ] && [ "${brand}" != " " ]; then
  {
-   echo "Brand $brand provided, fetching last tag on $brand..."
-   new_tag=v$version$brand-$env
-   old_tag=$( (echo "$tags" | grep -w "$env" | grep "$brand") | tail -n 1)
+   echo "Brand { $brand } provided."
+   new_tag=v$version$env-$brand
+   if [ "$found" = true ] ; then
+   {
+     echo "Fetching last tag on $brand..."
+     old_tag=$( (echo "${tags}" | grep "$env" | grep -w "$brand") | tail -n 1)
+     if [ -z "${old_tag}" ] || [ "${old_tag}" == " " ]; then
+       echo "Could not find an existing tag on brand {$brand}"
+     else
+       echo "Last tag on { $brand }: $old_tag"
+     fi
+   }
+   fi
  }
+else
+  {
+    echo "Brand not provided, new tag: $new_tag"
+    if [ "$found" = true ] ; then
+    {
+    old_tag=$( (echo "${tags}" | grep -w "$env") | tail -n 1)
+    if [[ $old_tag =~ "-" ]]; then
+      old_tag=""
+    fi
+    }
+    fi
+  }
 fi
 
-existing_new_tag=$(echo "$tags" | grep -w "$new_tag")
-
-if [ -n "${existing_new_tag}" ] && [ "${existing_new_tag}" != " " ]; then
+if [[ $tags =~ $new_tag ]]; then
+  {
     echo "Tag $new_tag already existing, a new release will not be created."
-else
-  exit 1
+    exit 1
+  }
 fi
 
 info_message=""
 release_message=""
 
-if [  -n "${old_tag}"  ] || [ "${old_tag}" != " "  ]; then
+if [  -n "${old_tag}"  ] && [ "${old_tag}" != " "  ]; then
+  {
   echo "Old tag: $old_tag - New tag: $new_tag"
   echo "Fetching commits between tags - $old_tag and $new_tag..."
   release_message=$(git log --pretty=medium "$old_tag".."$new_tag" | tr '\n' '\n')
+  }
 fi
 
-echo "Creating a new tag..."
-git tag "${new_tag}"
+echo "Creating a new tag $new_tag..."
+#git tag "${new_tag}"
 release_name="Release $new_tag"
-echo "Created new ${release_name}"
+echo "Created new ${release_name}!"
 
 {
   echo "new_tag=$new_tag"
