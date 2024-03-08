@@ -3,17 +3,17 @@ set -e
 
 echo "Checking mandatory input variables..."
 
-declare -A mandatory_vars
-
-mandatory_vars=( ["env"]="${env}" ["version"]="${version}")
-
-for key in "${!mandatory_vars[@]}"
-do
-  if [  "${mandatory_vars[$key]}" == " " ] || [ -z "${mandatory_vars[$key]}" ]; then
-      echo "'${key}' variable is empty, failing..."
-      exit 1
-  fi
-done
+#declare -A mandatory_vars
+#
+#mandatory_vars=( ["env"]="${env}" ["version"]="${version}")
+#
+#for key in "${!mandatory_vars[@]}"
+#do
+#  if [  "${mandatory_vars[$key]}" == " " ] || [ -z "${mandatory_vars[$key]}" ]; then
+#      echo "'${key}' variable is empty, failing..."
+#      exit 1
+#  fi
+#done
 found=false
 
 echo "All variables are present. Continuing..."
@@ -34,7 +34,7 @@ if [ -n "${brand}" ] && [ "${brand}" != " " ]; then
    new_tag=v$version$env-$brand
    if [ "$found" = true ] ; then
    {
-     echo "Fetching last tag on $brand..."
+     echo "Fetching last tag on { $brand }..."
      old_tag=$( (echo "${tags}" | grep "$env" | grep -w "$brand") | tail -n 1)
      if [ -z "${old_tag}" ] || [ "${old_tag}" == " " ]; then
        echo "Could not find an existing tag on brand {$brand} and environment {$env}"
@@ -58,7 +58,8 @@ else
   }
 fi
 
-if [[ $tags =~ $new_tag ]]; then
+
+if [[ $tags =~ $new_tag( |$) ]];then
   {
     echo "Tag $new_tag already existing, a new release will not be created."
     exit 0
